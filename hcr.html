@@ -37,6 +37,7 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 .introOv h1 i{font-style:normal;color:var(--accent)}
 .introOv .sub{margin-top:12px;color:var(--sub);font-size:clamp(14px,1.9vw,18px);font-weight:300}
 .introOv .cue{margin-top:16px;font-size:11px;letter-spacing:.3em;color:var(--sub);text-transform:uppercase}
+.introOv .cue{transition:opacity .4s}.introOv.fin .cue{opacity:0}
 .introOv .cue::after{content:"";display:block;width:1px;height:24px;background:var(--ink);margin:8px auto 0;animation:drop 1.8s ease-in-out infinite}
 @keyframes drop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
@@ -53,15 +54,20 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 .rotHint span{font-size:11.5px;font-weight:600;letter-spacing:.14em;color:rgba(170,195,255,.85);background:rgba(10,18,32,.6);border-radius:99px;padding:4px 12px;white-space:nowrap}
 .cap{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:min(1312px,calc(100vw - 48px));height:clamp(150px,18svh,210px);
   display:grid;grid-template-columns:62% 38%;border-top:1px solid rgba(255,255,255,.55);opacity:0;pointer-events:none}
+.cap::before{content:"HCR Wet Scrubber";position:absolute;left:0;bottom:100%;font-size:clamp(12px,1.1vw,15px);font-weight:500;color:#0a1220;background:rgba(237,242,250,.86);padding:4px 10px 3px;line-height:1.2}
 .cap .no{grid-column:1;padding:14px 0 0;font-size:clamp(26px,3vw,40px);font-weight:200;letter-spacing:-.01em;color:#fff;line-height:1.1}
 .cap .no b{font-weight:200}
 .cap .rt{grid-column:2;border-left:1px solid rgba(255,255,255,.55);padding:14px 0 0 22px}
 .cap h3{font-size:clamp(20px,2.2vw,30px);font-weight:700;letter-spacing:-.02em;line-height:1.2}
 .cap p{margin-top:12px;font-size:clamp(13px,1.1vw,16px);font-weight:300;color:rgba(237,242,250,.9);line-height:1.6}
 @media (max-width:700px){.cap{grid-template-columns:1fr;height:auto;padding-bottom:16px}.cap .rt{grid-column:1;border-left:0;padding:8px 0 0}}
-.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.chip{border:1px solid var(--line);border-radius:99px;padding:6px 13px;font-size:12.5px;font-weight:600;color:var(--sub);background:rgba(255,255,255,.05);transition:all .3s}
-.chip.on{border-color:var(--accent);color:#fff;background:var(--accent)}
+.chips{display:flex;flex-wrap:wrap;margin-top:22px}
+.chip{position:relative;padding:4px 18px 10px;font-size:clamp(15px,1.5vw,22px);font-weight:300;letter-spacing:-.01em;color:rgba(237,242,250,.78);border-left:1px solid rgba(255,255,255,.55);transition:color .3s,font-weight .3s}
+.chip:first-child{border-left:0;padding-left:0}
+.chip::after{content:"";position:absolute;left:19px;right:18px;bottom:0;height:3px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.chip:first-child::after{left:0}
+.chip.on{color:var(--accent);font-weight:600}
+.chip.on::after{transform:scaleX(1)}
 .chip.go{border-color:var(--accent);color:var(--accent);background:#fff;cursor:pointer;font-family:inherit}
 .chip.go:hover,.chip.go.on{background:var(--accent);color:#fff}
 .cap .chips{pointer-events:auto}
@@ -110,6 +116,10 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .dots{display:none}
 }
 
+.cta360{display:inline-flex;align-items:center;gap:14px;background:linear-gradient(180deg,#2b313a,#0b0e13);color:#fff;border-radius:99px;padding:7px 7px 7px 24px;font-weight:700;font-size:13px;letter-spacing:.01em;width:217px;justify-content:space-between;box-sizing:border-box;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22), 0 14px 34px -14px rgba(0,0,0,.85), 0 0 0 3px rgba(255,255,255,.07);transition:transform .25s,box-shadow .25s}
+.cta360 i{width:37px;height:37px;border-radius:50%;background:#fff;display:grid;place-items:center;font-style:normal;box-shadow:inset 0 -2px 4px rgba(0,0,0,.12)}
+.cta360:hover{transform:translateY(-3px);box-shadow:inset 0 1px 0 rgba(255,255,255,.22), 0 20px 44px -16px rgba(0,0,0,.9), 0 0 0 3px rgba(255,255,255,.12)}
 /* 상단 프로그레시브 블러 밴드 */
 .topblur{position:fixed;inset:0 0 auto;height:calc(116px + env(safe-area-inset-top,0px));z-index:40;pointer-events:none;opacity:0;transition:opacity .6s ease}
 .topblur.on{opacity:1}
@@ -176,20 +186,12 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         <span class="chip" id="k2">내부 세정 구조</span>
       </div></div>
     </div>
-    <div class="cap" id="c4">
-      <div class="no">STEP # 5.</div>
-      <div class="rt"><h3>현장에 놓이는 모습 그대로</h3>
-      <p>대표 각도로 돌아오며 제품 정보가 나타납니다.</p></div>
-    </div>
-
-    <div class="dots" id="dots"><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="dots" id="dots"><i></i><i></i><i></i><i></i></div>
 
     <div class="endcard" id="endcard">
-      <h3>HCR Wet Scrubber</h3>
-      <p>Outlet IPA 제거율 93~97% · Water Film 방식 <span class="dummy">DUMMY</span></p>
       <div class="row">
-        <a class="btn" href="#cta">도입 상담 신청</a>
-        <a class="btn ghost" href="#specs">기술 사양 보기</a>
+        <a class="cta360" href="#cta">도입 상담 신청<i><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.5 20.5 21 12 3.5 3.5l2.6 7L13.4 12l-7.3 1.5z" fill="#14181d"/></svg></i></a>
+        <a class="cta360" href="#specs">기술 사양 보기<i><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.5 20.5 21 12 3.5 3.5l2.6 7L13.4 12l-7.3 1.5z" fill="#14181d"/></svg></i></a>
       </div>
     </div>
   </div>
@@ -394,7 +396,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
   // ---------- 고정 카메라 + 제품 회전 키프레임 ----------
   var KP=[0,.25,.5,.75,1];
-  var AZ=[0,90,180,270,360]; // 정면 → 정측면 → 정후면 → 정측면 → 정면
+  var AZ=[0,90,180,270,300]; // 정면 → 정측면 → 정후면 → 정측면 → (피날레에서 시간 기반으로 정면 복귀)
   var FEL=0, FDI=13.2; // 고정 카메라: 고도 0°(윗면 비노출), 원거리·좁은 화각
   function kf(v,p){
     for(var i=0;i<KP.length-1;i++){
@@ -412,12 +414,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   function panelTarget(p){
     if(p<.38) return 1;
     if(p<.52) return 1-sm(ph(p,.38,.52))*.95;
-    if(p<.86) return .05;
-    return .05+sm(ph(p,.86,1))*.91;
+    return .05; // 피날레(ef)에서 다시 불투명
   }
 
-  var caps=[0,1,2,3,4].map(function(i){ return document.getElementById('c'+i); });
-  var CR=[[.05,.2],[.2,.45],[.45,.7],[.7,.9],[.88,1.02]];
+  var caps=[0,1,2,3].map(function(i){ return document.getElementById('c'+i); });
+  var CR=[[.05,.2],[.2,.45],[.45,.7],[.7,1.02]]; // STEP 4는 스크롤로 사라지지 않고 피날레에서 퇴장
   var dots=[].slice.call(document.querySelectorAll('#dots i'));
   var chips=[document.getElementById('k0'),document.getElementById('k1'),document.getElementById('k2')];
   var endcard=document.getElementById('endcard');
@@ -430,49 +431,55 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   camera.position.set(0, TY+Math.sin(FEL)*FDI, Math.cos(FEL)*FDI);
   camera.lookAt(0,TY,0);
 
-  function apply(p){
+  function apply(p,ef){
+    ef=ef||0; // 피날레 진행도(시간 기반): 0=스토리 구간, 1=초기 장면 복귀
     // 제품 회전 = 스크롤 각도 + 드래그 오프셋
     var gate=sm(ph(p,.12,.22)); // 타이틀 퇴장 전까지 정면 고정
-    G.rotation.y = (-kf(AZ,p)*Math.PI/180 + dragY)*gate;
+    var base=(-kf(AZ,p)*Math.PI/180 + dragY)*gate;
+    var front=Math.round(base/(2*Math.PI))*2*Math.PI; // 가장 가까운 정면
+    G.rotation.y = base + (front-base)*ef;
     var s=.76+.21*sm(ph(p,0,.14));
+    s += (.76-s)*ef;
     G.scale.set(s,s,s);
 
     if(rotHint){
-      var ho = hintHidden ? 0 : sm(ph(p,.14,.22))*(1-sm(ph(p,.84,.93)))*.85;
+      var ho = hintHidden ? 0 : sm(ph(p,.14,.22))*.85*(1-ef);
       rotHint.style.opacity=ho.toFixed(3);
     }
 
     if(introOv){
-      var io=1-sm(ph(p,.02,.12));
+      var io=Math.max(1-sm(ph(p,.02,.12)), ef);
       introOv.style.opacity=io.toFixed(3);
       introOv.style.transform='translateY('+(-24*(1-io)).toFixed(1)+'px)';
+      introOv.classList.toggle('fin', ef>.02);
     }
 
-    pOp += (panelTarget(p)-pOp)*.1;
+    var pt=panelTarget(p); pt += (1-pt)*ef;
+    pOp += (pt-pOp)*.1;
     panels.forEach(function(m){ m.material.transparent=true; m.material.opacity=pOp; });
     edges.material.opacity=.28+(1-pOp)*.4;
 
-    var h0=Math.sin(Math.PI*ph(p,.70,.80));
-    var h1=Math.sin(Math.PI*ph(p,.78,.88));
-    var h2=Math.sin(Math.PI*ph(p,.86,.95));
+    var h0=Math.sin(Math.PI*ph(p,.70,.78));
+    var h1=Math.sin(Math.PI*ph(p,.78,.86));
+    var h2=Math.sin(Math.PI*ph(p,.86,.96))*(1-ef);
     mDuct.emissiveIntensity=h0*.9;
     mOut.emissiveIntensity=0;
     mFilm.emissiveIntensity=h1*.9; mFilm.opacity=.32+h1*.3;
     mSpray.emissiveIntensity=h2*1.1;
-    chips[0].classList.toggle('on', ph(p,.70,.80)>0 && ph(p,.70,.80)<1);
-    chips[1].classList.toggle('on', ph(p,.78,.88)>0 && ph(p,.78,.88)<1);
-    chips[2].classList.toggle('on', ph(p,.86,.95)>0 && ph(p,.86,.95)<1);
+    var ci = p<.70 ? -1 : p<.78 ? 0 : p<.86 ? 1 : 2; // 한 번에 하나만 활성, 마지막 항목은 피날레까지 유지
+    if(ef>.5) ci=-1;
+    chips.forEach(function(c,i){ c.classList.toggle('on', i===ci); });
 
     var step=0;
     caps.forEach(function(c,i){
       var a=CR[i][0], b=CR[i][1];
-      var o=sm(ph(p,a,a+.04))*(1-sm(ph(p,b-.04,b)));
+      var o=sm(ph(p,a,a+.04))*(1-sm(ph(p,b-.04,b)))*(1-ef);
       c.style.opacity=o.toFixed(3);
       if(p>=a && p<b) step=i;
     });
-    dots.forEach(function(d,i){ d.classList.toggle('on', i===step); });
+    dots.forEach(function(d,i){ d.classList.toggle('on', i===step && ef<.5); });
 
-    var eo=sm(ph(p,.9,1));
+    var eo=ef;
     endcard.style.opacity=eo.toFixed(3);
     endcard.classList.toggle('live', eo>.6);
   }
@@ -515,9 +522,18 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   cv.addEventListener('pointerup', endDrag);
   cv.addEventListener('pointercancel', endDrag);
 
+  // 피날레: STEP 4 끝(스크롤 96%)에 도달하면 1초 대기 후 시간 기반으로 정면·초기 장면 복귀
+  var fin=0, finT=0, armed=null;
   (function loop(){
     p+=(tp-p)*.1;
-    apply(p);
+    var now=performance.now();
+    if(p>=.96 && tp>=.96){
+      if(armed===null) armed=now;
+      if(now-armed>=1000) finT=1;
+    }else{ armed=null; finT=0; }
+    fin += (finT-fin)*(finT ? .055 : .12); // 진입 약 1.2s, 복귀는 빠르게
+    if(Math.abs(finT-fin)<.002) fin=finT;
+    apply(p, sm(fin));
     renderer.render(scene,camera);
     requestAnimationFrame(loop);
   })();
