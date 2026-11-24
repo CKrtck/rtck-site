@@ -1,0 +1,88 @@
+/* ==========================================================================
+   03 History — ( 30 YEARS RTCK ) 인트로 + 괘선 기준 연도·내용 롤
+   - 스크롤 구동: A 화면 가득 한 줄 → B 축소·좌우로 벌어지며 괘선 → C 연도(위)·내용(아래) 롤
+   - 괘선이 가림막: 연도는 괘선 위 마스크, 내용은 괘선 아래 마스크 안에서 이동
+   - 색·크기 변수는 .hr 안에서만 정의 (사이트 공용 변수 덮어쓰지 않음)
+   ========================================================================== */
+.hr{
+  --hr-bg:#f9f9f9;
+  --hr-ink:#000;
+  --hr-rule:#555;
+  --hr-ease:cubic-bezier(.2,.7,.1,1);
+  --hr-out:cubic-bezier(.22,.8,.24,1);
+  --h-size:clamp(16px,1.3vw,30px);                  /* 헤더 줄 */
+  --y-size:clamp(72px,min(10vw,22svh),220px);       /* 연도 */
+  --d-size:clamp(18px,1.7vw,36px);                  /* 내용 */
+  --rule-gap:clamp(20px,5.5vw,140px);               /* 좌우 텍스트 ↔ 괘선 간격 */
+  --lift:clamp(6px,.9vw,20px);                      /* 연도 아랫변 띄움 */
+  --d-gap:clamp(14px,1.8vw,40px);                   /* 괘선 ↔ 내용 간격 */
+  position:relative;height:680svh;background:var(--hr-bg);
+  color:var(--hr-ink);font-family:var(--f-body);
+}
+.hr *{box-sizing:border-box;margin:0;padding:0}
+.hr-sticky{position:sticky;top:0;height:100svh;overflow:hidden}
+
+/* 시각 숨김 제목 */
+.hr-title{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+
+/* 헤더 줄: 화면 세로 중앙. 좌·우 조각은 최종 위치(좌우 끝)에 두고,
+   JS가 진행도 e(0~1)에 따라 transform으로 "화면 가득 한 줄" → 최종 상태를 보간 */
+.hr-head{
+  position:absolute;left:var(--pad);right:var(--pad);top:50%;transform:translateY(calc(-50% + var(--hy,0px)));
+  display:flex;align-items:center;
+  font-weight:700;font-size:var(--h-size);line-height:1.2;letter-spacing:-.01em;
+  text-transform:uppercase;white-space:nowrap;
+}
+.hr-l,.hr-r{flex:none;display:block}
+.hr-l{transform-origin:left center}
+.hr-r{transform-origin:right center}
+.hr-gap{position:relative;align-self:stretch;flex:1 1 auto}
+.hr-line{
+  position:absolute;left:var(--rule-gap);right:var(--rule-gap);top:50%;height:1px;margin-top:-.5px;
+  background:var(--hr-rule);transform:scaleX(0);
+}
+
+/* 목록: 모든 항목이 같은 자리에 겹침. 각 항목의 마스크는 고정, 안의 글자만 이동 */
+.hr-list{list-style:none;position:absolute;inset:0;pointer-events:none}
+.hr-ym,.hr-dm{position:absolute;left:var(--pad);right:var(--pad);overflow:hidden;text-align:center}
+.hr-ym{bottom:calc(50% + var(--lift))}               /* 괘선 위 */
+.hr-dm{top:calc(50% + var(--d-gap))}                 /* 괘선 아래 */
+.hr-y,.hr-d{display:block;transition:transform .6s var(--hr-ease),opacity .45s ease}
+.hr-y{
+  font-weight:700;font-size:var(--y-size);line-height:1;letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums;transform:translateY(105%);   /* 대기: 괘선 아래(가려짐) */
+}
+.hr-d{
+  font-weight:500;font-size:var(--d-size);line-height:1.3;letter-spacing:-.02em;
+  white-space:nowrap;transform:translateY(-105%);                 /* 대기: 괘선 위(가려짐) */
+}
+/* 지나간 항목: 연도는 위로, 내용은 아래로 빠짐 */
+.hr-item.is-prev .hr-y{transform:translateY(-105%);opacity:0}
+.hr-item.is-prev .hr-d{transform:translateY(105%);opacity:0}
+/* 활성(인트로 C 이후에만 보임) */
+.hr.is-c .hr-item.is-on .hr-y,
+.hr.is-c .hr-item.is-on .hr-d{transform:none}
+
+/* 모바일: 좌우 텍스트 작게, 연도 축소, 내용 2줄 허용 */
+@media (max-width:720px){
+  .hr{
+    --h-size:14px;
+    --y-size:clamp(52px,17vw,96px);
+    --d-size:clamp(16px,4.6vw,20px);
+    --rule-gap:clamp(10px,3.5vw,20px);
+  }
+  .hr-d{white-space:normal}
+}
+
+/* 모션 축소: 고정 해제, 벌어진 헤더 + 세로 목록 */
+@media (prefers-reduced-motion:reduce){
+  .hr{height:auto}
+  .hr-sticky{position:static;height:auto;overflow:visible;padding:calc(var(--nav-h,68px) + 48px) var(--pad) 96px}
+  .hr-head{position:relative;left:auto;right:auto;top:auto;transform:none}
+  .hr-l,.hr-r,.hr-line{transform:none!important}
+  .hr-list{position:static;display:flex;flex-direction:column;align-items:center;gap:clamp(28px,4vw,56px);margin-top:clamp(40px,6vw,96px)}
+  .hr-item{display:flex;flex-direction:column;align-items:center;gap:.4em;text-align:center}
+  .hr-ym,.hr-dm{position:static;overflow:visible}
+  .hr-y,.hr-d,.hr-item.is-prev .hr-y,.hr-item.is-prev .hr-d{transform:none;opacity:1;transition:none;white-space:normal}
+  .hr-y{font-size:clamp(48px,6vw,120px)}
+}
