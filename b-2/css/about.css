@@ -1,0 +1,48 @@
+/* About RTCK(회사 소개) — 흰 바탕, 작은 글자, 넓은 여백, 둥근 모서리 사진의 조용한 편집 톤
+   12칸 기준: 1~4칸 비움(제목만) / 5~7칸 글 / 8~12칸 사진. 우측 상단에 항목 목록 */
+.ab{background:#fff;color:#111;--ab-sub:rgba(0,0,0,.58);--ab-line:rgba(0,0,0,.16);padding:calc(var(--nav-h,64px) + clamp(28px,4vw,72px)) var(--pad) clamp(72px,8vw,160px);max-width:2200px;margin-inline:auto;box-sizing:border-box}
+.ab-top{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:clamp(12px,1.2vw,24px)}
+.ab-sub{grid-column:10/13;position:sticky;top:calc(var(--nav-h,64px) + 20px);z-index:2;justify-self:start}
+.ab-sub ul{list-style:none;margin:0;padding:0;font-size:clamp(.78rem,.78vw,.98rem);line-height:1.5}
+.ab-sub a{color:var(--ab-sub);text-decoration:none;transition:color .25s}
+.ab-sub a:hover{color:#111}
+.ab-sub a.is-on{color:#111;font-weight:700}
+.ab-intro{grid-column:1/8;margin-top:clamp(28px,4vw,72px)}
+.ab-title{font-family:var(--f-body);font-size:clamp(1.5rem,1.9vw,2.4rem);font-weight:700;letter-spacing:-.03em;line-height:1.2}
+.ab-lede{margin-top:clamp(14px,1.4vw,26px);font-size:clamp(.8rem,.8vw,1rem);line-height:1.5;color:var(--ab-sub)}
+.ab-row{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:clamp(12px,1.2vw,24px);margin-top:clamp(56px,7.4vw,150px);scroll-margin-top:calc(var(--nav-h,64px) + 28px)}
+.ab-intro{scroll-margin-top:calc(var(--nav-h,64px) + 28px)}
+.ab-top + .ab-row{margin-top:clamp(36px,3.2vw,64px)}
+.ab-txt{grid-column:4/7;padding-top:.3em}
+.ab-h{font-family:var(--f-body);font-size:clamp(1.5rem,1.9vw,2.4rem);font-weight:400;letter-spacing:-.02em;line-height:1.15}
+.ab-ko{margin-top:.5em;font-size:clamp(.78rem,.78vw,.98rem);color:var(--ab-sub)}
+.ab-p{margin-top:clamp(18px,2vw,36px);font-size:clamp(.8rem,.8vw,1rem);line-height:1.6;color:var(--ab-sub)}
+.ab-img{grid-column:7/13;margin:0;aspect-ratio:2.08/1;border-radius:clamp(8px,.8vw,14px);overflow:hidden;background:#ECECEC;display:grid;place-items:center;color:rgba(0,0,0,.5)}
+.ab-img img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(1)}
+.ab-row:target .ab-h{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.22em}
+@media (max-width:900px){
+  .ab-sub{grid-column:1/-1;position:static}
+  .ab-sub ul{display:flex;flex-wrap:wrap;gap:4px 16px}
+  .ab-intro{grid-column:1/-1}
+  .ab-txt{grid-column:1/-1}
+  .ab-img{grid-column:1/-1;margin-top:20px}
+}
+
+/* 상단 띠 고정: 제목(좌)과 항목 목록(우)은 화면 위에 붙어 있고, 아래 항목들만 그 밑으로 스크롤됨 */
+.ab{padding-top:0}
+.ab-top{position:sticky;top:0;z-index:5;background:#fff;align-items:start;padding:calc(var(--nav-h,64px) + clamp(18px,2.4vw,44px)) 0 clamp(18px,1.8vw,32px)}
+.ab-top::after{content:"";position:absolute;left:0;right:0;top:100%;height:clamp(16px,1.6vw,28px);background:linear-gradient(#fff,rgba(255,255,255,0));pointer-events:none}
+.ab-intro{grid-row:1;margin-top:0}
+.ab-sub{grid-row:1;position:static}
+.ab section.ab-row[id],.ab-intro{scroll-margin-top:calc(var(--ab-band,300px) + 20px)}
+@media (max-width:900px){
+  .ab-top{position:static;padding-bottom:0}
+  .ab-top::after{content:none}
+  .ab-intro,.ab-sub{grid-row:auto}
+  .ab-intro{order:-1}
+  .ab-sub{position:sticky;top:0;z-index:5;background:#fff;margin-top:18px;padding:10px 0;border-bottom:1px solid var(--ab-line)}
+  .ab section.ab-row[id]{scroll-margin-top:calc(var(--ab-band,60px) + 16px)}
+  .ab-top{display:contents}
+  .ab-intro{padding-top:calc(var(--nav-h,64px) + 20px)}
+  .ab-sub{top:0;padding-top:12px}
+}
